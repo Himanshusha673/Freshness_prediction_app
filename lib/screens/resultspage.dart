@@ -22,13 +22,13 @@ bool autoSavedToGallery = false;
 var primaryColor = const Color.fromRGBO(12, 52, 61, 1);
 
 class ResultsPage extends StatefulWidget {
-  String path = '', mlModel = '', part = '', details = '';
+  String myImagePath = '', mlModel = '', part = '', details = '';
 
   late int R, B, G;
   String predictionResult = '';
 
   ResultsPage(
-      {required this.path,
+      {required this.myImagePath,
       required this.B,
       required this.G,
       required this.R,
@@ -50,15 +50,16 @@ class ResultsPageState extends State<ResultsPage> {
   bool cameraOn = true;
   File? croppedImage;
   bool getBottom = true;
+  bool smallLoading = false;
 
   var predictionNumeric;
 
   @override
   void initState() {
     super.initState();
-    debugPrint('initialPAth:${widget.path}');
+    debugPrint('initialPAth:${widget.myImagePath}');
     resultPlatformState();
-    debugPrint('initialPAth:${widget.path}');
+    debugPrint('initialPAth:${widget.myImagePath}');
 
     // debugPrint(widget.mlModel);
   }
@@ -83,9 +84,8 @@ class ResultsPageState extends State<ResultsPage> {
     });
     //First method to download images and save it to Gallery
     try {
-      await GallerySaver.saveImage(widget.path,
-              albumName:
-                  'Banana_Predictions/ ${widget.predictionResult} $cdate')
+      await GallerySaver.saveImage(widget.myImagePath,
+              albumName: '${widget.mlModel}/ ${widget.predictionResult} $cdate')
           .then((val) {
         if (val == true) {
           debugPrint('image Saved');
@@ -163,10 +163,9 @@ class ResultsPageState extends State<ResultsPage> {
 
   ////////////////////////////////////////////
 
-  late bool notNUll;
-
   void _getImage() async {
     // debugPrint('$autoSavedToGallery');
+    // clearCache();
     XFile? imageXfile;
     try {
       setState(() {
@@ -179,7 +178,6 @@ class ResultsPageState extends State<ResultsPage> {
       );
       if (imageXfile == null) {
         setState(() {
-          notNUll == true;
           cameraOn = true;
         });
       }
@@ -204,11 +202,11 @@ class ResultsPageState extends State<ResultsPage> {
           });
         } else {
           setState(() {
-            widget.path = croppedImage!.path;
+            widget.myImagePath = croppedImage!.path;
             cameraOn = true;
           });
 
-          // _apiCallSetStates(croppedImage!.path);
+          _apiCallSetStates(croppedImage!.path);
           if (autoSavedToGallery) {
             downloadFile();
           }
@@ -218,10 +216,10 @@ class ResultsPageState extends State<ResultsPage> {
 
       } else {
         setState(() {
-          widget.path = imageXfile!.path;
+          widget.myImagePath = imageXfile!.path;
           cameraOn = true;
         });
-        //_apiCallSetStates(imageXfile!.path);
+        _apiCallSetStates(imageXfile.path);
         debugPrint('$autoSavedToGallery');
 
         if (autoSavedToGallery) {
@@ -272,8 +270,14 @@ class ResultsPageState extends State<ResultsPage> {
   }
 
   void _apiCallSetStates(path) {
-    uploadImage(path, androidInfo.model, androidInfo.brand, "BANANA", "BANANA",
-            "CAM_TEST", false)
+    debugPrint("api caling");
+    setState(() {
+      smallLoading == true;
+      cameraOn = false;
+    });
+    // clearCache();
+    uploadImage(path, androidInfo.model, androidInfo.brand, widget.mlModel,
+            widget.mlModel, "CAM_TEST", false)
         .then((value) => {
               debugPrint('first REs VALUE : $value'),
               value.stream
@@ -289,6 +293,7 @@ class ResultsPageState extends State<ResultsPage> {
                         debugPrint(jsonDecode(value).toString()),
                         setState(() {
                           widget.predictionResult = jsonDecode(value)['result'];
+
                           widget.details = jsonDecode(value)['action'];
 
                           predictionNumeric = jsonDecode(value)['numericVal'];
@@ -298,7 +303,8 @@ class ResultsPageState extends State<ResultsPage> {
                           widget.G = jsonDecode(value)['G'];
                           widget.B = jsonDecode(value)['B'];
                           cameraOn = true;
-                          widget.path = path;
+                          smallLoading = false;
+                          widget.myImagePath = path;
                         }),
 
                         // Navigator.pushNamed(context, '/results', arguments: {
@@ -339,7 +345,7 @@ class ResultsPageState extends State<ResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    widget.path == null ? notNUll = true : notNUll = false;
+    //  widget.path == null ? notNUll = true : notNUll = false;
     //double deviceSize = MediaQuery.of(context).size.width;
 
     return WillPopScope(
@@ -398,10 +404,8 @@ class ResultsPageState extends State<ResultsPage> {
                 foregroundColor: Colors.white,
                 splashColor: Colors.purple,
                 onPressed: () {
-                  clearCache();
-
                   _getImage();
-                  debugPrint(' now PAth:${widget.path}');
+                  debugPrint(' now PAth:${widget.myImagePath}');
                 },
                 backgroundColor: primaryColor,
                 child: FaIcon(Icons.camera_alt_rounded),
@@ -452,9 +456,11 @@ class ResultsPageState extends State<ResultsPage> {
                   : SizedBox(),
               body: Column(
                 children: [
-                  notNUll
-                      ? Text('This is NUll')
-                      : SquareCroppedImage(path: widget.path),
+                  // notNUll
+                  //  ?
+                  // Text('This is NUll')
+                  // :
+                  SquareCroppedImage(path: widget.myImagePath),
                   SizedBox(
                     height: 55,
                   ),
@@ -481,10 +487,17 @@ class ResultsPageState extends State<ResultsPage> {
                             bottom: MediaQuery.of(context).size.width * 0.4),
                         child: Container(
                           child: FittedBox(
-                            child: Text(
-                              notNUll ? 'Sorry.....' : widget.predictionResult,
-                              style: const TextStyle(fontSize: 25),
-                            ),
+                            child: smallLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Text(
+                                    /* notNUll ? 'Sorry.....' :*/ widget
+                                        .predictionResult,
+                                    style: const TextStyle(fontSize: 25),
+                                  ),
                           ),
                         ),
                       ),

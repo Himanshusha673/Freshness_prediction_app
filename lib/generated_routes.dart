@@ -30,7 +30,7 @@ class MyRoutes {
                   mlModel: arguements['mlModel'],
                   details: arguements['details'],
                   part: arguements['part'],
-                  path: arguements['imagePath'],
+                  myImagePath: arguements['imagePath'],
                   R: arguements['R'],
                   G: arguements['G'],
                   B: arguements['B'],

@@ -113,7 +113,8 @@ class _CameraAppState extends State<CameraApp> {
 
   // calling the api and we sent the path only and it takes all necessary parameters which are need to use in uploadimage
 
-  void _apiCallSetStates(path) {
+  void _apiCallSetStates(String path) {
+    debugPrint("api caling");
     setState(() {
       cameraOn = false;
     });
@@ -258,45 +259,17 @@ class _CameraAppState extends State<CameraApp> {
           });
         }
 
-        //_apiCallSetStates(croppedImage!.path);
+        _apiCallSetStates(croppedImage!.path);
         setState(() {
           myImagePath = croppedImage!.path;
           cameraOn = false;
         });
-        Navigator.pushNamed(
-          context,
-          Result_Page,
-          arguments: {
-            'mlModel': widget.mlModel,
-            'part': widget.part,
-            'details': "only For testing",
-            'R': 255,
-            'G': 255,
-            'B': 255,
-            'predictionResults': "Testing",
-            'imagePath': myImagePath
-          },
-        );
       } else {
-        // _apiCallSetStates(imageXfile.path);
+        _apiCallSetStates(imageXfile.path);
         setState(() {
           myImagePath = imageXfile.path;
           cameraOn = false;
         });
-        Navigator.pushNamed(
-          context,
-          Result_Page,
-          arguments: {
-            'mlModel': widget.mlModel,
-            'part': widget.part,
-            'details': "only For testing",
-            'R': 255,
-            'G': 255,
-            'B': 255,
-            'predictionResults': "Testing",
-            'imagePath': myImagePath
-          },
-        );
       }
     } catch (e) {
       debugPrint('error Message is ${e.toString()}');
