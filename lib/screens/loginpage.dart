@@ -1,9 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:qzenesapp/constants.dart';
-import 'package:qzenesapp/screens/home.dart';
+import 'package:qzenesapp/screens/homepage.dart';
 
 import 'package:requests/requests.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 InputDecoration emailInpDec = InputDecoration(
@@ -81,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -204,22 +203,22 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   Visibility(
-                    child: const CircularProgressIndicator(),
                     visible: loading ? true : false,
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
                   Visibility(
+                    visible: loginError == 'Invalid' ? true : false,
                     child: const Text(
                       'Invalid ID or Password',
                       style: TextStyle(color: Colors.red),
                     ),
-                    visible: loginError == 'Invalid' ? true : false,
                   ),
                   Visibility(
+                    visible: loginError == 'Error' ? true : false,
                     child: const Text(
                       'Server error',
                       style: TextStyle(color: Colors.red),
                     ),
-                    visible: loginError == 'Error' ? true : false,
                   ),
                 ],
               ),

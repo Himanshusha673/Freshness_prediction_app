@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qzenesapp/screens/home.dart';
+
+import '../screens/homepage.dart';
+
 
 class MyNavButtons extends StatelessWidget {
   bool isMyChoice = false;

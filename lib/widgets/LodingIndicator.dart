@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:qzenesapp/screens/home.dart';
+import 'package:qzenesapp/screens/homepage.dart';
+
 
 class LodingInd extends StatefulWidget {
-  const LodingInd({Key? key}) : super(key: key);
+  String msg = '';
+  String model = ' ';
+
+  LodingInd({required this.msg, required this.model});
 
   @override
   State<LodingInd> createState() => _LodingIndState();
@@ -17,21 +21,21 @@ class _LodingIndState extends State<LodingInd> {
         width: 200,
         decoration: BoxDecoration(),
         child: Dialog(
-            backgroundColor: Colors.white,
+            backgroundColor: primaryColor,
             elevation: 2,
             child: Center(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
+                    widget.model == "BANANA"
+                        ? Image.asset("images/assets/BananLoading.gif")
+                        : Image.asset("images/assets/FisLoading.gif"),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Text(
-                      ' Loading...',
-                      style: TextStyle(color: primaryColor),
+                      ' ${widget.msg}',
+                      style: TextStyle(color: Colors.white),
                     )
                   ]),
             )),

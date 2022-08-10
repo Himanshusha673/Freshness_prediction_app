@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qzenesapp/constants.dart';
-import 'package:qzenesapp/screens/camerapage.dart';
-import 'package:qzenesapp/screens/home.dart';
-import 'package:qzenesapp/screens/login.dart';
-import 'package:qzenesapp/screens/resultspage.dart';
+import 'package:qzenesapp/constants/constants.dart';
+import 'package:qzenesapp/screens/cameraPage.dart';
+
+
+import 'package:qzenesapp/screens/homepage.dart';
+import 'package:qzenesapp/screens/loginpage.dart';
+import 'package:qzenesapp/screens/resultPage.dart';
 import 'package:qzenesapp/webview/official_website.dart';
+
+
 import 'package:qzenesapp/webview/qzenes_dashboard.dart';
 
 class MyRoutes {
@@ -17,10 +21,8 @@ class MyRoutes {
       case Camera_page:
         Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => CameraApp(
-                  mlModel: args['model'],
-                  part: args['part'],
-                ));
+            builder: (_) => CameraApp(mlModel:    args['model'],
+                  part: args['part'],) );
       case Result_Page:
         Map<String, dynamic> arguements =
             settings.arguments as Map<String, dynamic>;

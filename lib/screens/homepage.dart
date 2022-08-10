@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:qzenesapp/constants.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
+import '../constants/constants.dart';
 
 Color primaryColor = const Color.fromRGBO(12, 52, 61, 1);
 String finalEmailId = '';
@@ -24,6 +25,7 @@ String instagramUrl = 'https://www.instagram.com/qzenselabs/?hl=en';
 String linkedInUrl = 'https://in.linkedin.com/company/qzense/';
 
 Future<void> _launchSocial(String url) async {
+  // ignore: deprecated_member_use
   if (!await launch(
     url,
     forceSafariVC: false,
@@ -76,8 +78,8 @@ class _HomePageState extends State<HomePage> {
                         //
                         UserIcon(userName: finalEmailId),
 
-                        SizedBox(width: 15),
-                        LogoutButton(),
+                        const SizedBox(width: 15),
+                        const LogoutButton(),
                       ],
                     ),
                     const SizedBox(
@@ -98,9 +100,6 @@ class _HomePageState extends State<HomePage> {
                           const NavButtons(),
                           const SizedBox(
                             height: 60,
-                          ),
-                          const SizedBox(
-                            height: 30,
                           ),
                           const DropDownSelection(),
                           const SocialFooter(),
@@ -177,6 +176,7 @@ class NavButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Flexible(
           flex: 1,
@@ -233,7 +233,6 @@ class NavButtons extends StatelessWidget {
           ), //Container
         ) //Flexible
       ], //<Widget>[]
-      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 }
@@ -303,14 +302,14 @@ class _DropDownSelectionState extends State<DropDownSelection> {
                 child: Ink(
                   height: 100,
                   width: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
                     'images/assets/Fish.png',
                   ))),
                 ),
               )),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           InkWell(
@@ -326,7 +325,7 @@ class _DropDownSelectionState extends State<DropDownSelection> {
                 child: Ink(
                   height: 100,
                   width: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
                     'images/assets/Bananana.png',
@@ -365,11 +364,10 @@ class _LogoutButtonState extends State<LogoutButton> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Logout'),
-            content: Text('Are you sure you want to logout?'),
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
             actions: <Widget>[
               ElevatedButton(
-                style: ButtonStyle(),
                 child: const Text('Yes'),
                 onPressed: () {
                   setState(() {
@@ -381,7 +379,6 @@ class _LogoutButtonState extends State<LogoutButton> {
                 },
               ),
               ElevatedButton(
-                style: ButtonStyle(),
                 child: const Text('No'),
                 onPressed: () {
                   setState(() {

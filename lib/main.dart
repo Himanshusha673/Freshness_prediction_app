@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qzenesapp/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:qzenesapp/generated_routes.dart';
-import 'package:qzenesapp/screens/home.dart';
+import 'package:qzenesapp/repository/predictionrepo.dart';
+import 'package:qzenesapp/services/qzenes_api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants/constants.dart';
+import 'cubits/prediction/prediction_cubit_cubit.dart';
 
 bool auth = false;
 Future<bool> checkAuthToken(prefs) async {
@@ -57,15 +62,29 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      color: const Color.fromRGBO(12, 52, 61, 1),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: auth ? '/' : Login_page,
+    return RepositoryProvider(
+      create: (context) =>
+          PredictionRepository(qzenesApiService: QzenesApiServices()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<PredictionCubit>(
+            create: (context) => PredictionCubit(
+                predictionRepository: context.read<PredictionRepository>()),
+          )
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Qzenes Official',
+          color: Color.fromARGB(255, 12, 52, 61),
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: auth ? '/' : Login_page,
 
-      onGenerateRoute: MyRoutes.route,
-      //home: ,
+          onGenerateRoute: MyRoutes.route,
+          //home: HomePage(),
+        ),
+      ),
     );
   }
 }

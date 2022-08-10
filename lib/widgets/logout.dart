@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:qzenesapp/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants.dart';
+import '../constants/constants.dart';
+import '../screens/homepage.dart';
 
 class MyLogoutButton extends StatefulWidget {
   bool isIconButton = false;
