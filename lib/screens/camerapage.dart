@@ -13,7 +13,6 @@ import '../cubits/prediction/prediction_cubit_cubit.dart';
 import '../widgets/Linksfooter.dart';
 import '../widgets/LodingIndicator.dart';
 
-
 class CameraApp extends StatefulWidget {
   String mlModel = '';
   String part = '';
@@ -86,23 +85,23 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   build(BuildContext context) {
-    size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size; // fetch screen size
 
-    // fetch screen size
-
+    //for setting default orientation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
+    //instance of cubit to handle state management
     var provider = BlocProvider.of<PredictionCubit>(context);
-
+    // method to implement the logic of camera and calling cubit & api
     void _getImage(ImageSource source) async {
       try {
         setState(() {
           cameraOn = false;
         });
 
+        //picking image from camera  and gallery
         XFile? imageXfile = await ImagePicker().pickImage(
           source: source,
           imageQuality: 50,
@@ -113,12 +112,13 @@ class _CameraAppState extends State<CameraApp> {
           });
         }
 
-        debugPrint('$imageXfile');
-
+        //debugPrint('$imageXfile');
+        // code for getting dimention of selected image
         File tempImage = File(imageXfile!.path);
         var decodedImage =
             await decodeImageFromList(tempImage.readAsBytesSync());
         if (decodedImage.height != decodedImage.width) {
+          //if image is not square then cropper opens else call to api
           croppedImage = await ImageCropper().cropImage(
               sourcePath: imageXfile.path,
               aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
@@ -139,6 +139,7 @@ class _CameraAppState extends State<CameraApp> {
             myImagePath = croppedImage!.path;
             cameraOn = true;
           });
+          //method for calling fetchPrediction method of prediction cubit class
 
           await provider
               .fetchPredictions(croppedImage!.path, androidInfo.model,
@@ -168,6 +169,7 @@ class _CameraAppState extends State<CameraApp> {
                   hour, androidInfo.brand, widget.mlModel, false)
               .whenComplete(() {
             var mypredictions = provider.state.predictions;
+            //after calling if there is no error occurs then call automatically to resultpage
             Navigator.pushNamed(context, Result_Page, arguments: {
               'mlModel': widget.mlModel,
               'part': widget.part,
