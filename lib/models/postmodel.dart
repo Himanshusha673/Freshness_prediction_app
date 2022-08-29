@@ -1,3 +1,5 @@
+//for future use
+
 class PostModel {
   final String path;
   final dynamic deviceModel;

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ class PredictionRepository {
   final QzenesApiServices qzenesApiService;
   PredictionRepository({required this.qzenesApiService});
 
-  Future<Predictions?> GetPrediction(
+  Future<Predictions?> getPrediction(
       path, deviceModel, part, hour, brand, mlModel, flashOn) async {
     final Predictions? predictions;
 

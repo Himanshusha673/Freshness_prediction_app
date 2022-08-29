@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +19,7 @@ class PredictionCubit extends Cubit<PredictionState> {
     emit(state.copyWith(status: PredictioStatus.loading));
     debugPrint("in cubit and emitting state");
     try {
-      Predictions? predictionss = await predictionRepository.GetPrediction(
+      Predictions? predictionss = await predictionRepository.getPrediction(
           path, deviceModel, part, hour, brand, mlModel, flashOn);
 
       emit(state.copyWith(

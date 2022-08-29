@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// to be implement on future
 class CustomError extends Equatable {
   final String errorMsg;
 

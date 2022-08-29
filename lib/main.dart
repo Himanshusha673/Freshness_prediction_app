@@ -14,6 +14,7 @@ import 'cubits/prediction/prediction_cubit_cubit.dart';
 bool auth = false;
 Future<bool> checkAuthToken(prefs) async {
   final token = prefs.getString('token') ?? "";
+  //below code for checking user's device has internet connection or not
   try {
     final result = await InternetAddress.lookup('google.com');
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -22,6 +23,7 @@ Future<bool> checkAuthToken(prefs) async {
   } on SocketException catch (_) {
     debugPrint('not Connected');
   }
+  /////////////////////
   if (token != "") {
     debugPrint('Local Token found!');
     debugPrint('Local Token : $token\n');
@@ -53,13 +55,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   auth = await checkAuthToken(prefs);
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -79,6 +81,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
+          //managing routing by generate routes
           initialRoute: auth ? '/' : Login_page,
 
           onGenerateRoute: MyRoutes.route,

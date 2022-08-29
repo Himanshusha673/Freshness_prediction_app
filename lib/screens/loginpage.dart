@@ -4,6 +4,7 @@ import 'package:qzenesapp/screens/homepage.dart';
 
 import 'package:requests/requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//creating logic and ui of input decoration for email and password fields
 
 InputDecoration emailInpDec = InputDecoration(
     hintText: 'Email ID',
@@ -16,6 +17,7 @@ InputDecoration passInpDec = InputDecoration(
     filled: true,
     hintStyle: const TextStyle(color: Colors.white, fontSize: 15),
     fillColor: primaryColor);
+//////////////////////////////////////
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       loading = true;
     });
     try {
+      // POST REQUEST for getting content of access token and refresh
       var res = await Requests.post(
           'http://mobileapi.qzenselabs.com:8000/api/auth/jwt/create/',
           body: {
@@ -54,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint("AccessToken : ${data['access']}");
         //debugPrint();
 
-        //Store access token and email locally on phone for avoiding logins
+        //Store access token and email locally on phone for avoiding logins repeatedly
         final prefs = await SharedPreferences.getInstance();
         // below code will save the data in local storage of mobile
         prefs.setString('token', data['access']);

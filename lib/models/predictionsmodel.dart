@@ -8,14 +8,14 @@ class Predictions extends Equatable {
   final int G;
   final int B;
 
-  Predictions(
+  const Predictions(
       {this.result,
       this.action,
       this.numericVal,
       required this.R,
       required this.G,
       required this.B});
-  factory Predictions.initial() => Predictions(
+  factory Predictions.initial() => const Predictions(
       result: 'No result found',
       action: 'null',
       numericVal: 'null',
